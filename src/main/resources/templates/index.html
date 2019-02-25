@@ -22,7 +22,7 @@
 			<tbody>
 				<tr th:each="recipe : ${recipes}">
 					<td><a th:href="${recipe.url}"><span th:text="${recipe.description}"></span></a></td>
-					<td th:text="${recipe.source}">Its Author</td>
+					<td th:text="${recipe.source}" />
 				</tr>
 			</tbody>
 		</table>
