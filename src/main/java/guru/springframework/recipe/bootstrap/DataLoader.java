@@ -92,11 +92,10 @@ public class DataLoader implements CommandLineRunner {
 		Recipe savedRecipe = recipeService.save(recipe);
 		savedRecipe.setNotes(savedNotes);
 		ingredients.forEach(ingredient -> {
-			ingredient.setRecipe(savedRecipe);
+			savedRecipe.addIngredient(ingredient);
 			ingredientService.save(ingredient);
 		});
-		savedRecipe.setIngredients(ingredients);
-		savedNotes.setRecipe(savedRecipe);
+		savedRecipe.setNotes(savedNotes);
 		notesService.save(savedNotes);
 		recipeService.save(savedRecipe);
 
@@ -166,11 +165,9 @@ public class DataLoader implements CommandLineRunner {
 		Recipe savedRecipe = recipeService.save(recipe);
 		savedRecipe.setNotes(savedNotes);
 		ingredients.forEach(ingredient -> {
-			ingredient.setRecipe(savedRecipe);
+			savedRecipe.addIngredient(ingredient);
 			ingredientService.save(ingredient);
 		});
-		savedRecipe.setIngredients(ingredients);
-		savedNotes.setRecipe(savedRecipe);
 		notesService.save(savedNotes);
 		recipeService.save(savedRecipe);
 
