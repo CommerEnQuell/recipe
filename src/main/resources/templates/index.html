@@ -3,10 +3,30 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Recipe Home</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
 	</head>
 	
 	<body>
 		<h1>My Recipes!</h1>
+		<p>
+		<hr>
+		<p>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Source</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="recipe : ${recipes}">
+					<td><a th:href="${recipe.url}"><span th:text="${recipe.description}"></span></a></td>
+					<td th:text="${recipe.source}">Its Author</td>
+				</tr>
+			</tbody>
+		</table>
+		</p>
 	
 	</body>
 </html>
