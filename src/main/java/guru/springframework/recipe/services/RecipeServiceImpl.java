@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 
 import guru.springframework.recipe.domain.Recipe;
 import guru.springframework.recipe.repositories.RecipeRepository;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @Service
 public class RecipeServiceImpl extends AbstractServiceImpl<Recipe, Long> implements RecipeService {
 
@@ -17,6 +20,13 @@ public class RecipeServiceImpl extends AbstractServiceImpl<Recipe, Long> impleme
 	@Override
 	public Set<Recipe> findAll() {
 		return super.findAll();
+	}
+	
+	public Set<Recipe> getRecipes() {
+		log.debug("I'm in the service");
+		
+		return super.findAll();
+		
 	}
 	
 	@Override

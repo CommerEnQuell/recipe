@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import guru.springframework.recipe.domain.Category;
 import guru.springframework.recipe.domain.Difficulty;
@@ -18,51 +20,54 @@ import guru.springframework.recipe.services.IngredientService;
 import guru.springframework.recipe.services.NotesService;
 import guru.springframework.recipe.services.RecipeService;
 import guru.springframework.recipe.services.UnitOfMeasureService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
-public class DataLoader implements CommandLineRunner {
+public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 	private final RecipeService recipeService;
 	private final UnitOfMeasureService unitOfMeasureService;
 	private final CategoryService categoryService;
 	private final NotesService notesService;
 	private final IngredientService ingredientService;
 	
-	public DataLoader(RecipeService recipeService, UnitOfMeasureService uomService, CategoryService catService, IngredientService ingredientService, NotesService notesService) {
+	public RecipeBootstrap(RecipeService recipeService, UnitOfMeasureService uomService, CategoryService catService, IngredientService ingredientService, NotesService notesService) {
 		this.recipeService = recipeService;
 		this.unitOfMeasureService = uomService;
 		this.categoryService = catService;
 		this.notesService = notesService;
 		this.ingredientService = ingredientService;
-		System.err.println("Data loader initialized");
+		log.debug("Data loader initialized");
 }
 
 	@Override
-	public void run(String... args) throws Exception {
+	@Transactional
+	public void onApplicationEvent(ContextRefreshedEvent event) {
 		int count = recipeService.findAll().size();
-		System.err.println(count + " recipe(s) found");
+		log.debug(count + " recipe(s) found");
 		if (count == 0) {
-			System.err.println("Loading data");
+			log.debug("Loading data");
 			loadGuacamole();
 			loadSomeChicken();
 		}
 	}
 	
-	private void loadGuacamole() {
-		Recipe recipe = new Recipe();
-		recipe.setPrepTime(Integer.valueOf(10));
-		recipe.setCookTime(null);
-		recipe.setServings(Integer.valueOf(3));
-		recipe.setDifficulty(Difficulty.EASY);
+	private Recipe loadGuacamole() {
+		Recipe kwakmolen = new Recipe();
+		kwakmolen.setPrepTime(Integer.valueOf(10));
+		kwakmolen.setCookTime(null);
+		kwakmolen.setServings(Integer.valueOf(3));
+		kwakmolen.setDifficulty(Difficulty.EASY);
 		Category category = categoryService.findByDescription("Mexican");
-		Set<Category> categories = recipe.getCategories();
+		Set<Category> categories = kwakmolen.getCategories();
 		if (categories == null) {
 			categories = new HashSet<>();
-			recipe.setCategories(categories);
+			kwakmolen.setCategories(categories);
 		}
 		categories.add(category);
-		recipe.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
-		recipe.setDescription("How to Make Perfect Guacamole");
-		recipe.setSource("Elise Bauer - simplyrecipes.com");
+		kwakmolen.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
+		kwakmolen.setDescription("How to Make Perfect Guacamole");
+		kwakmolen.setSource("Elise Bauer - simplyrecipes.com");
 		
 		String notesStr = "The BEST guacamole! So easy to make with ripe avocados, salt, serrano chiles, cilantro and lime. "
 						+ "Garnish with red radishes or jicama. Serve with tortilla chips. Watch how to make guacamole - it's easy!";
@@ -78,7 +83,7 @@ public class DataLoader implements CommandLineRunner {
 			+   "Remember that much of this is done to taste because of the variability in the fresh ingredients. Start with this recipe and adjust to your taste."
 			+ "4 Cover with plastic and chill to store: Place plastic wrap on the surface of the guacamole cover it and to prevent air reaching it. (The oxygen in the air causes oxidation which will turn the guacamole brown.) Refrigerate until ready to serve.\n"
 			+   "Chilling tomatoes hurts their flavor, so if you want to add chopped tomato to your guacamole, add it just before serving.";
-		recipe.setDirections(directions);
+		kwakmolen.setDirections(directions);
 		Set<Ingredient> ingredients = new HashSet<>();
 		addIngredient(ingredients, BigDecimal.valueOf(2.0d), "Piece", "ripe avocados");
 		addIngredient(ingredients, BigDecimal.valueOf(0.5d), "Teaspoon", "Kosher salt");
@@ -89,7 +94,7 @@ public class DataLoader implements CommandLineRunner {
 		addIngredient(ingredients, null, "Dash", "freshly grated black pepper");
 		addIngredient(ingredients, BigDecimal.valueOf(0.5d), "Piece", "ripe tomato, chopped");
 		
-		Recipe savedRecipe = recipeService.save(recipe);
+		Recipe savedRecipe = recipeService.save(kwakmolen);
 		savedRecipe.setNotes(savedNotes);
 		ingredients.forEach(ingredient -> {
 			savedRecipe.addIngredient(ingredient);
@@ -99,26 +104,27 @@ public class DataLoader implements CommandLineRunner {
 		notesService.save(savedNotes);
 		recipeService.save(savedRecipe);
 
-		System.err.println("Recipe \"" + savedRecipe.getDescription() + "\" saved as #" + savedRecipe.getId());
+		log.debug("Post-Aztec Kwakmolen: Recipe \"" + savedRecipe.getDescription() + "\" saved as #" + savedRecipe.getId());
 		
+		return savedRecipe;
 	}
 	
-	private void loadSomeChicken() {
-		Recipe recipe = new Recipe();
-		recipe.setPrepTime(Integer.valueOf(20));
-		recipe.setCookTime(Integer.valueOf(15));
-		recipe.setServings(Integer.valueOf(5));
-		recipe.setDifficulty(Difficulty.EASY);
+	private Recipe loadSomeChicken() {
+		Recipe soChicken = new Recipe();
+		soChicken.setPrepTime(Integer.valueOf(20));
+		soChicken.setCookTime(Integer.valueOf(15));
+		soChicken.setServings(Integer.valueOf(5));
+		soChicken.setDifficulty(Difficulty.EASY);
 		Category category = categoryService.findByDescription("Mexican");
-		Set<Category> categories = recipe.getCategories();
+		Set<Category> categories = soChicken.getCategories();
 		if (categories == null) {
 			categories = new HashSet<>();
-			recipe.setCategories(categories);
+			soChicken.setCategories(categories);
 		}
 		categories.add(category);
-		recipe.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
-		recipe.setDescription("Spicy Grilled Chicken Tacos Recipe");
-		recipe.setSource("Sally Vargas - simplyrecipes.com");
+		soChicken.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
+		soChicken.setDescription("Spicy Grilled Chicken Tacos Recipe");
+		soChicken.setSource("Sally Vargas - simplyrecipes.com");
 		
 		String notesStr = "Spicy grilled chicken tacos! Quick marinade, then grill. Ready in about 30 minutes. "
 						+ "Great for a quick weeknight dinner, backyard cookouts, and tailgate parties.";
@@ -140,7 +146,7 @@ public class DataLoader implements CommandLineRunner {
 			+ "5 Assemble the tacos: Slice the chicken into strips. On each tortilla, place a small handful of arugula. Top with chicken slices, "
 			+   "sliced avocado, radishes, tomatoes, and onion slices. Drizzle with the thinned sour cream. Serve with lime wedges.";
 			
-		recipe.setDirections(directions);
+		soChicken.setDirections(directions);
 		Set<Ingredient> ingredients = new HashSet<>();
 		addIngredient(ingredients, BigDecimal.valueOf(2.0d), "Tablespoon", "ancho chili powder");
 		addIngredient(ingredients, BigDecimal.valueOf(1.0d), "Teaspoon", "dried oregano");
@@ -162,7 +168,7 @@ public class DataLoader implements CommandLineRunner {
 		addIngredient(ingredients, BigDecimal.valueOf(0.25d), "Cup", "milk");
 		addIngredient(ingredients, BigDecimal.valueOf(1.0d), "Piece", "lime, cut into wedges");
 		
-		Recipe savedRecipe = recipeService.save(recipe);
+		Recipe savedRecipe = recipeService.save(soChicken);
 		savedRecipe.setNotes(savedNotes);
 		ingredients.forEach(ingredient -> {
 			savedRecipe.addIngredient(ingredient);
@@ -171,7 +177,9 @@ public class DataLoader implements CommandLineRunner {
 		notesService.save(savedNotes);
 		recipeService.save(savedRecipe);
 
-		System.err.println("Recipe \"" + savedRecipe.getDescription() + "\" saved as #" + savedRecipe.getId());
+		log.debug("Chickenshit Incident: Recipe \"" + savedRecipe.getDescription() + "\" saved as #" + savedRecipe.getId());
+		
+		return savedRecipe;
 	}
 
 	private void addIngredient(Set<Ingredient> ingredients, BigDecimal amount, String unit, String descr) {
@@ -188,4 +196,5 @@ public class DataLoader implements CommandLineRunner {
 		
 		ingredients.add(savedIngredient);
 	}
+
 }
