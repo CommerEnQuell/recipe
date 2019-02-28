@@ -21,7 +21,7 @@ public class RecipeServiceImpl extends AbstractServiceImpl<Recipe, Long> impleme
 	public Set<Recipe> findAll() {
 		return super.findAll();
 	}
-	
+
 	public Set<Recipe> getRecipes() {
 		log.debug("I'm in the service");
 		
