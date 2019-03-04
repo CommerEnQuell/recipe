@@ -1,5 +1,7 @@
 package guru.springframework.recipe.services;
 
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -25,8 +27,22 @@ public class RecipeServiceImpl extends AbstractServiceImpl<Recipe, Long> impleme
 	public Set<Recipe> getRecipes() {
 		log.debug("I'm in the service");
 		
+		Set<Recipe> recipeSet = new HashSet<>();
+		
 		return super.findAll();
 		
+	}
+	
+	@Override
+	public Recipe findById(Long id) {
+		log.debug("Finding recipe with id #" + id);
+		
+		Optional<Recipe> o =  repository.findById(id);
+		if (o == null || !o.isPresent()) {
+			throw new RuntimeException("Recipe #" + id + " not found!");
+		}
+		
+		return o.get();
 	}
 	
 	@Override

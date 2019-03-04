@@ -80,8 +80,8 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 			+ "2 Mash with a fork: Using a fork, roughly mash the avocado. (Don't overdo it! The guacamole should be a little chunky.)\n\n"
 			+ "3 Add salt, lime juice, and the rest: Sprinkle with salt and lime (or lemon) juice. The acid in the lime juice will provide some balance to the richness of the avocado and will help delay the avocados from turning brown.\n" 
 			+   "Add the chopped onion, cilantro, black pepper, and chiles. Chili peppers vary individually in their hotness. So, start with a half of one chili pepper and add to the guacamole to your desired degree of hotness.\n"
-			+   "Remember that much of this is done to taste because of the variability in the fresh ingredients. Start with this recipe and adjust to your taste."
-			+ "4 Cover with plastic and chill to store: Place plastic wrap on the surface of the guacamole cover it and to prevent air reaching it. (The oxygen in the air causes oxidation which will turn the guacamole brown.) Refrigerate until ready to serve.\n"
+			+   "Remember that much of this is done to taste because of the variability in the fresh ingredients. Start with this recipe and adjust to your taste.\n\n"
+			+ "4 Cover with plastic and chill to store: Place plastic wrap on the surface of the guacamole cover it and to prevent air reaching it (The oxygen in the air causes oxidation which will turn the guacamole brown). Refrigerate until ready to serve.\n"
 			+   "Chilling tomatoes hurts their flavor, so if you want to add chopped tomato to your guacamole, add it just before serving.";
 		kwakmolen.setDirections(directions);
 		Set<Ingredient> ingredients = new HashSet<>();
@@ -122,6 +122,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 			soChicken.setCategories(categories);
 		}
 		categories.add(category);
+		categories.add(categoryService.findByDescription("American"));
 		soChicken.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
 		soChicken.setDescription("Spicy Grilled Chicken Tacos Recipe");
 		soChicken.setSource("Sally Vargas - simplyrecipes.com");
@@ -133,7 +134,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 		Notes savedNotes = notesService.save(notes);
 		
 		String directions =
-			  "1 Prepare a gas or charcoal grill for medium-high, direct heat.\n"
+			  "1 Prepare a gas or charcoal grill for medium-high, direct heat.\r\n"
 			+ "2 Make the marinade and coat the chicken: In a large bowl, stir together the chili powder, oregano, cumin, sugar, salt, "
 			+   "garlic and orange zest. Stir in the orange juice and olive oil to make a loose paste. "
 			+   "Add the chicken to the bowl and toss to coat all over.\n" 

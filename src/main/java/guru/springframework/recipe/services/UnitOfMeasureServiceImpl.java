@@ -17,7 +17,11 @@ public class UnitOfMeasureServiceImpl extends AbstractServiceImpl<UnitOfMeasure,
 	
 	@Override
 	public UnitOfMeasure findById(Long id) {
-		return super.findById(id);
+		Optional<UnitOfMeasure> o = repository.findById(id);
+		if (o == null || !o.isPresent()) {
+			throw new RuntimeException("Unit of Measure #" + id + " not found!");
+		}
+		return o.get();
 	}
 	
 	@Override

@@ -14,18 +14,12 @@ public abstract class AbstractServiceImpl<T, ID> {
 		this.repository = repository;
 	}
 	
-	public T findById(ID id) {
-		T retval = null;
-		Optional<T> o = repository.findById(id);
-		if (o != null && o.isPresent()) {
-			retval = o.get();
-		}
-		return retval;
-	}
+	public abstract T findById(ID id);
 	
 	public Set<T> findAll() {
 		Set<T> retval = new HashSet<>();
-		repository.findAll().forEach(t -> retval.add(t));
+//		repository.findAll().forEach(t -> retval.add(t)); -- Replaced by alternative notation
+		repository.findAll().iterator().forEachRemaining(retval::add);
 		return retval;
 	}
 
