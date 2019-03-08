@@ -18,19 +18,31 @@
 		<div class="container-fluid" style="margin-top: 20px">
 			<div class="row">
 				<div class="col-md-8 offset-md-2">
-					<div class="card">
+					<div class="card" style="margin-bottom:20px">
 						<div class="card-header text-white bg-primary">
-							<h2 class="card-title" th:text="${recipe.description}">My Recipes!</h2>
+							<div class="row">
+								<div class="col-10">
+									<h2 class="card-title" th:text="${recipe.description}">My Recipes!</h2>
+								</div>
+								<div class="col-2" align="right">
+									<a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/image'}" class="btn btn-light">Change Image</a>
+								</div>
+							</div>
 						</div>
 						<div class="card-body">
 							<div class="row">
-								<div class="col">
+								<div class="col-3">
 									<h5>Categories:</h5>
 								</div>
-								<div class="col-9">
+								<div class="col-3">
 									<ul th:each="category : ${recipe.categories}">
 										<li th:text="${category.description}"></li>
 									</ul>
+								</div>
+								<div class="col-6">
+									<img src="../../static/images/guacamole400x400WithX.jpg"
+										 th:src="@{'/recipe/' + ${recipe.id} + '/recipeimage'}"
+										 width="200" height="200">
 								</div>
 							</div>
 							<div class="row">
@@ -83,9 +95,16 @@
 			</div>
 			<div class="row">
 				<div class="col-md-8 offset-md-2">
-					<div class="card">
+					<div class="card" style="margin-bottom:20px">
 						<div class="card-header text-white bg-primary">
-							<h2 class="card-title">Ingredients</h1>
+							<div class="row">
+								<div class="col-11">
+									<h2 class="card-title">Ingredients</h2>
+								</div>
+								<div class="col-1">
+									<a class="btn btn-light" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">View</a>					
+								</div>
+							</div>
 						</div>
 						<div class="card-body">
 							<ul th:each="ingredient : ${recipe.ingredients}">
@@ -101,7 +120,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-8 offset-md-2">
-					<div class="card">
+					<div class="card" style="margin-bottom:20px">
 						<div class="card-header text-white bg-primary">
 							<h2 class="card-title">Directions</h2>
 						</div>

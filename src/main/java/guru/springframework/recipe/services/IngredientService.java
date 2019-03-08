@@ -1,14 +1,10 @@
 package guru.springframework.recipe.services;
 
-import java.util.Set;
-
-import guru.springframework.recipe.domain.Ingredient;
+import guru.springframework.recipe.commands.IngredientCommand;
 
 public interface IngredientService {
-
-	public Ingredient findById(Long id);
 	
-	public Set<Ingredient> findAll();
-	
-	public Ingredient save(Ingredient ingredient);
+	public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long id);
+	public IngredientCommand saveIngredientCommand(IngredientCommand command);
+	public void deleteById(Long recipeId, Long idToDelete);
 }

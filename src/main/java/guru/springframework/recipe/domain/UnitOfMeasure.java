@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class UnitOfMeasure {
+public class UnitOfMeasure implements Identifiable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
