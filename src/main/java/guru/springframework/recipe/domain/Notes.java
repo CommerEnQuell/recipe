@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(exclude = {"recipe"})
 @Entity
-public class Notes {
+public class Notes implements Identifiable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

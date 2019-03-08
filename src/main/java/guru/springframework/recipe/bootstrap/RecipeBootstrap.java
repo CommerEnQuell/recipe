@@ -15,8 +15,8 @@ import guru.springframework.recipe.domain.Ingredient;
 import guru.springframework.recipe.domain.Notes;
 import guru.springframework.recipe.domain.Recipe;
 import guru.springframework.recipe.domain.UnitOfMeasure;
+import guru.springframework.recipe.repositories.IngredientRepository;
 import guru.springframework.recipe.services.CategoryService;
-import guru.springframework.recipe.services.IngredientService;
 import guru.springframework.recipe.services.NotesService;
 import guru.springframework.recipe.services.RecipeService;
 import guru.springframework.recipe.services.UnitOfMeasureService;
@@ -29,14 +29,15 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 	private final UnitOfMeasureService unitOfMeasureService;
 	private final CategoryService categoryService;
 	private final NotesService notesService;
-	private final IngredientService ingredientService;
+	private final IngredientRepository ingredientRepository;
 	
-	public RecipeBootstrap(RecipeService recipeService, UnitOfMeasureService uomService, CategoryService catService, IngredientService ingredientService, NotesService notesService) {
+	
+	public RecipeBootstrap(RecipeService recipeService, UnitOfMeasureService uomService, CategoryService catService, IngredientRepository ingredientRepository, NotesService notesService) {
 		this.recipeService = recipeService;
 		this.unitOfMeasureService = uomService;
 		this.categoryService = catService;
 		this.notesService = notesService;
-		this.ingredientService = ingredientService;
+		this.ingredientRepository = ingredientRepository;
 		log.debug("Data loader initialized");
 }
 
@@ -66,7 +67,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 		}
 		categories.add(category);
 		kwakmolen.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
-		kwakmolen.setDescription("How to Make Perfect Guacamole");
+		kwakmolen.setDescription("Perfect Guacamole");
 		kwakmolen.setSource("Elise Bauer - simplyrecipes.com");
 		
 		String notesStr = "The BEST guacamole! So easy to make with ripe avocados, salt, serrano chiles, cilantro and lime. "
@@ -98,7 +99,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 		savedRecipe.setNotes(savedNotes);
 		ingredients.forEach(ingredient -> {
 			savedRecipe.addIngredient(ingredient);
-			ingredientService.save(ingredient);
+			ingredientRepository.save(ingredient);
 		});
 		savedRecipe.setNotes(savedNotes);
 		notesService.save(savedNotes);
@@ -173,7 +174,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 		savedRecipe.setNotes(savedNotes);
 		ingredients.forEach(ingredient -> {
 			savedRecipe.addIngredient(ingredient);
-			ingredientService.save(ingredient);
+			ingredientRepository.save(ingredient);
 		});
 		notesService.save(savedNotes);
 		recipeService.save(savedRecipe);
@@ -193,7 +194,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 			ingredient.setUom(uom);
 		}
 		
-		Ingredient savedIngredient = ingredientService.save(ingredient);
+		Ingredient savedIngredient = ingredientRepository.save(ingredient);
 		
 		ingredients.add(savedIngredient);
 	}

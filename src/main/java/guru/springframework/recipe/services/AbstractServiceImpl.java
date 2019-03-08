@@ -26,4 +26,8 @@ public abstract class AbstractServiceImpl<T, ID> {
 	public T save(T entity) {
 		return repository.save(entity);
 	}
+	
+	public void deleteById(ID id) {
+		repository.deleteById(id);
+	}
 }

@@ -21,7 +21,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Recipe {
+public class Recipe implements Identifiable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
