@@ -1,8 +1,12 @@
 package guru.springframework.recipe.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Before;
@@ -16,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import guru.springframework.recipe.converters.RecipeCommandToRecipe;
 import guru.springframework.recipe.converters.RecipeToRecipeCommand;
 import guru.springframework.recipe.domain.Recipe;
+import guru.springframework.recipe.exceptions.NotFoundException;
 import guru.springframework.recipe.repositories.RecipeRepository;
 
 public class RecipeServiceImplTest {
@@ -70,4 +75,11 @@ public class RecipeServiceImplTest {
 		Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(ArgumentMatchers.anyLong());
 	}
 
+	@Test
+	public void getRecipeByIdTestNotFound() throws Exception {
+		Optional<Recipe> recipeOptional = Optional.empty();
+	
+		assertThrows(NotFoundException.class, () -> when(recipeService.findById(anyLong())).thenReturn(recipeOptional));
+		
+	}
 }

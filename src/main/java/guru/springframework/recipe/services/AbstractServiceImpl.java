@@ -14,7 +14,7 @@ public abstract class AbstractServiceImpl<T, ID> {
 		this.repository = repository;
 	}
 	
-	public abstract T findById(ID id);
+	public abstract Optional<T> findById(ID id);
 	
 	public Set<T> findAll() {
 		Set<T> retval = new HashSet<>();

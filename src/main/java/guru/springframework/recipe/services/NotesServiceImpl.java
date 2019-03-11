@@ -25,12 +25,9 @@ public class NotesServiceImpl extends AbstractServiceImpl<Notes, Long> implement
 	}
 
 	@Override
-	public Notes findById(Long id) {
+	public Optional<Notes> findById(Long id) {
 		Optional<Notes> o = repository.findById(id);
-		if (o == null || !o.isPresent()) {
-			throw new RuntimeException("Notes #" + id + " not found!");
-		}
-		return o.get();
+		return o;
 	}
 
 	@Override

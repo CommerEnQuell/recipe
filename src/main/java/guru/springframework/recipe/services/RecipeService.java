@@ -1,5 +1,6 @@
 package guru.springframework.recipe.services;
 
+import java.util.Optional;
 import java.util.Set;
 
 import guru.springframework.recipe.commands.RecipeCommand;
@@ -9,7 +10,7 @@ public interface RecipeService {
 
 	public Set<Recipe> findAll();
 	
-	public Recipe findById(Long id);
+	public Optional<Recipe> findById(Long id);
 
 	public RecipeCommand findCommandById(Long id);
 	

@@ -11,6 +11,7 @@ import guru.springframework.recipe.commands.RecipeCommand;
 import guru.springframework.recipe.converters.RecipeCommandToRecipe;
 import guru.springframework.recipe.converters.RecipeToRecipeCommand;
 import guru.springframework.recipe.domain.Recipe;
+import guru.springframework.recipe.exceptions.NotFoundException;
 import guru.springframework.recipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,23 +42,26 @@ public class RecipeServiceImpl extends AbstractServiceImpl<Recipe, Long> impleme
 	}
 	
 	@Override
-	public Recipe findById(Long id) {
+	public Optional<Recipe> findById(Long id) {
 		log.debug("Finding recipe with id #" + id);
 		
-		Optional<Recipe> o =  repository.findById(id);
-		if (o == null || !o.isPresent()) {
-			throw new RuntimeException("Recipe #" + id + " not found!");
+		Optional<Recipe> recipeOptional = repository.findById(id);
+		if (recipeOptional == null || !recipeOptional.isPresent()) {
+			throw new NotFoundException("Recipe not found. For ID value: " + id);
 		}
 		
-		return o.get();
+		return recipeOptional;
 	}
 	
 	@Override
 	@Transactional
 	public RecipeCommand findCommandById(Long id) {
-		Recipe recipe = findById(id);
+		Optional<Recipe> recipeOptional = findById(id);
+		if (recipeOptional == null || !recipeOptional.isPresent()) {
+			throw new NotFoundException("Recipe not found (id=" + id + ")");
+		}
 		
-		RecipeCommand retval = recipeToRecipeCommand.convert(recipe);
+		RecipeCommand retval = recipeToRecipeCommand.convert(recipeOptional.get());
 		return retval;
 	}
 	

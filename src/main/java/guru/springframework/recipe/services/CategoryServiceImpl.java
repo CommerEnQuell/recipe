@@ -6,7 +6,6 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import guru.springframework.recipe.domain.Category;
-import guru.springframework.recipe.domain.Notes;
 import guru.springframework.recipe.repositories.CategoryRepository;
 
 @Service
@@ -17,12 +16,8 @@ public class CategoryServiceImpl extends AbstractServiceImpl<Category, Long> imp
 	}
 	
 	@Override
-	public Category findById(Long id) {
-		Optional<Category> o = repository.findById(id);
-		if (o == null || !o.isPresent()) {
-			throw new RuntimeException("Category #" + id + " not found!");
-		}
-		return o.get();
+	public Optional<Category> findById(Long id) {
+		return repository.findById(id);
 	}
 	
 	@Override
